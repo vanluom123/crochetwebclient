@@ -12,6 +12,7 @@ import org.xiaofeng.webclient.common.ClientErrorException;
 import org.xiaofeng.webclient.common.ServerErrorException;
 import org.xiaofeng.webclient.type.HttpMethod;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -38,10 +39,7 @@ public class WebClientServiceImpl implements WebClientService {
 
     private <T> CompletableFuture<T> toCompletableFuture(Mono<T> mono) {
         CompletableFuture<T> future = new CompletableFuture<>();
-        mono.subscribe(
-                future::complete,
-                future::completeExceptionally
-        );
+        mono.subscribe(future::complete, future::completeExceptionally);
         return future;
     }
 
@@ -60,6 +58,7 @@ public class WebClientServiceImpl implements WebClientService {
                 )
                 .bodyToMono(clazz)
                 .timeout(Duration.ofSeconds(10))
+                .retryWhen(Retry.backoff(3, Duration.ofSeconds(2)))
                 .doOnError(error -> logger.error("Error occurred: {}", error.getMessage()));
     }
 
@@ -219,11 +218,28 @@ public class WebClientServiceImpl implements WebClientService {
     }
 
     @Override
+    public <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
+                                                                   HttpMethod httpMethod,
+                                                                   BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
+                                                                   Class<TResponse> clazz,
+                                                                   Consumer<HttpHeaders> headers) {
+        return toCompletableFuture(executeWithBody(uri, httpMethod, bodyInserter, clazz, headers));
+    }
+
+    @Override
     public <TRequest, TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
                                                                              HttpMethod httpMethod,
                                                                              TRequest request,
                                                                              Class<TResponse> clazz) {
         return toCompletableFuture(executeWithBody(uri, httpMethod, request, clazz));
+    }
+
+    @Override
+    public <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
+                                                                   HttpMethod httpMethod,
+                                                                   BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
+                                                                   Class<TResponse> clazz) {
+        return toCompletableFuture(executeWithBody(uri, httpMethod, bodyInserter, clazz));
     }
 
     @Override
