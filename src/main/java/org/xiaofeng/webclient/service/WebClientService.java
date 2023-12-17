@@ -53,12 +53,23 @@ public interface WebClientService {
 
     <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
                                                             HttpMethod httpMethod,
+                                                            BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
+                                                            Class<TResponse> clazz);
+
+    <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
+                                                            HttpMethod httpMethod,
                                                             Class<TResponse> clazz,
                                                             Consumer<HttpHeaders> headers);
 
     <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
                                                             HttpMethod httpMethod,
                                                             Class<TResponse> clazz);
+
+    <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
+                                                            HttpMethod httpMethod,
+                                                            BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
+                                                            Class<TResponse> clazz,
+                                                            Consumer<HttpHeaders> headers);
 
     <TRequest, TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
                                                                       HttpMethod httpMethod,
