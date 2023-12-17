@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.xiaofeng.webclient.common.ClientErrorException;
+import org.xiaofeng.webclient.common.ServerErrorException;
 import org.xiaofeng.webclient.type.HttpMethod;
 import reactor.core.publisher.Mono;
 
@@ -47,12 +49,12 @@ public class WebClientServiceImpl implements WebClientService {
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
                         response.bodyToMono(String.class)
                                 .flatMap(errorBody ->
-                                        Mono.error(new RuntimeException(errorBody)))
+                                        Mono.error(new ClientErrorException(errorBody)))
                 )
                 .onStatus(HttpStatusCode::is5xxServerError, response ->
                         response.bodyToMono(String.class)
                                 .flatMap(errorBody ->
-                                        Mono.error(new RuntimeException(errorBody)))
+                                        Mono.error(new ServerErrorException(errorBody)))
                 )
                 .bodyToMono(clazz)
                 .timeout(Duration.ofSeconds(10))
@@ -88,6 +90,8 @@ public class WebClientServiceImpl implements WebClientService {
 
     private <TResponse> Mono<TResponse> executeWithoutBody(String uri, HttpMethod httpMethod, Class<TResponse> clazz, Consumer<HttpHeaders> headers) {
         WebClient.RequestHeadersSpec<?> headersSpec = switch (httpMethod) {
+            case POST -> client().post().uri(uri);
+            case PUT -> client().put().uri(uri);
             case GET -> client().get().uri(uri);
             case DELETE -> client().delete().uri(uri);
             default -> throw new IllegalArgumentException("Unsupported request type: " + httpMethod);
@@ -99,6 +103,8 @@ public class WebClientServiceImpl implements WebClientService {
 
     private <TResponse> Mono<TResponse> executeWithoutBody(String uri, HttpMethod httpMethod, Class<TResponse> clazz) {
         WebClient.RequestHeadersSpec<?> headersSpec = switch (httpMethod) {
+            case POST -> client().post().uri(uri);
+            case PUT -> client().put().uri(uri);
             case GET -> client().get().uri(uri);
             case DELETE -> client().delete().uri(uri);
             default -> throw new IllegalArgumentException("Unsupported request type: " + httpMethod);
