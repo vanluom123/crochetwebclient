@@ -1,6 +1,6 @@
 # Crochet WebClient
 
-**Description**: This Java library provides convenient integration with REST APIs using the Spring WebClient and Google Guice for dependency injection. The library is built with Java 17 and managed using Gradle.
+This Java library provides convenient integration with REST APIs using the Spring WebClient and Google Guice for dependency injection. The library is built with Java 17 and managed using Gradle.
 
 ## Usage
 
@@ -9,8 +9,16 @@
 Add the following dependency to your Gradle project:
 
 ```groovy
-implementation 'your.group:your-artifact:your-version'
+implementation 'com.github.crochetwebclient:crochetwebclient:1.0.3'
 
+```
+Maven project:
+```
+<dependency>
+  <groupId>com.github.crochetwebclient</groupId>
+  <artifactId>crochetwebclient</artifactId>
+  <version>1.0.3</version>
+</dependency> 
 ```
 
 ### 2. Configuration
