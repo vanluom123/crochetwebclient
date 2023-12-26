@@ -13,66 +13,54 @@ import java.util.function.Consumer;
 public interface WebClientService {
     WebClient.Builder builder();
 
-    <TRequest, TResponse> Mono<TResponse> invokeApi(String uri,
-                                                    HttpMethod httpMethod,
-                                                    TRequest request,
-                                                    Class<TResponse> clazz,
-                                                    Consumer<HttpHeaders> headers);
+    Mono<String> invokeApi(String uri,
+                           HttpMethod httpMethod,
+                           String request,
+                           Consumer<HttpHeaders> headers);
 
-    <TResponse> Mono<TResponse> invokeApi(String uri,
-                                          HttpMethod httpMethod,
-                                          BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
-                                          Class<TResponse> clazz);
+    Mono<String> invokeApi(String uri,
+                           HttpMethod httpMethod,
+                           BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
+                           Consumer<HttpHeaders> headers);
 
-    <TResponse> Mono<TResponse> invokeApi(String uri,
-                                          HttpMethod httpMethod,
-                                          Class<TResponse> clazz,
-                                          Consumer<HttpHeaders> headers);
+    Mono<String> invokeApi(String uri,
+                           HttpMethod httpMethod,
+                           String request);
 
-    <TResponse> Mono<TResponse> invokeApi(String uri,
-                                          HttpMethod httpMethod,
-                                          Class<TResponse> clazz);
+    Mono<String> invokeApi(String uri,
+                           HttpMethod httpMethod,
+                           BodyInserter<?, ? super ClientHttpRequest> bodyInserter);
 
-    <TResponse> Mono<TResponse> invokeApi(String uri,
-                                          HttpMethod httpMethod,
-                                          BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
-                                          Class<TResponse> clazz,
-                                          Consumer<HttpHeaders> headers);
+    Mono<String> invokeApi(String uri,
+                           HttpMethod httpMethod,
+                           Consumer<HttpHeaders> headers);
 
-    <TRequest, TResponse> Mono<TResponse> invokeApi(String uri,
-                                                    HttpMethod httpMethod,
-                                                    TRequest request,
-                                                    Class<TResponse> clazz);
+    Mono<String> invokeApi(String uri,
+                           HttpMethod httpMethod);
 
     //------------------Async method--------------------------
-    <TRequest, TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
-                                                                      HttpMethod httpMethod,
-                                                                      TRequest request,
-                                                                      Class<TResponse> clazz,
-                                                                      Consumer<HttpHeaders> headers);
+    CompletableFuture<String> invokeApiAsync(String uri,
+                                             HttpMethod httpMethod,
+                                             String request,
+                                             Consumer<HttpHeaders> headers);
 
-    <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
-                                                            HttpMethod httpMethod,
-                                                            BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
-                                                            Class<TResponse> clazz);
+    CompletableFuture<String> invokeApiAsync(String uri,
+                                             HttpMethod httpMethod,
+                                             BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
+                                             Consumer<HttpHeaders> headers);
 
-    <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
-                                                            HttpMethod httpMethod,
-                                                            Class<TResponse> clazz,
-                                                            Consumer<HttpHeaders> headers);
+    CompletableFuture<String> invokeApiAsync(String uri,
+                                             HttpMethod httpMethod,
+                                             String request);
 
-    <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
-                                                            HttpMethod httpMethod,
-                                                            Class<TResponse> clazz);
+    CompletableFuture<String> invokeApiAsync(String uri,
+                                             HttpMethod httpMethod,
+                                             BodyInserter<?, ? super ClientHttpRequest> bodyInserter);
 
-    <TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
-                                                            HttpMethod httpMethod,
-                                                            BodyInserter<?, ? super ClientHttpRequest> bodyInserter,
-                                                            Class<TResponse> clazz,
-                                                            Consumer<HttpHeaders> headers);
+    CompletableFuture<String> invokeApiAsync(String uri,
+                                             HttpMethod httpMethod,
+                                             Consumer<HttpHeaders> headers);
 
-    <TRequest, TResponse> CompletableFuture<TResponse> invokeApiAsync(String uri,
-                                                                      HttpMethod httpMethod,
-                                                                      TRequest request,
-                                                                      Class<TResponse> clazz);
+    CompletableFuture<String> invokeApiAsync(String uri,
+                                             HttpMethod httpMethod);
 }
